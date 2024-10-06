@@ -35,6 +35,11 @@ def main():
         
         for entity in updatable:
             entity.update(dt)
+
+        for asteroid in asteroids:
+            if asteroid.check_collision(player) == True:
+                print("Game Over!")
+                exit()
         
         for entity in drawable:
             entity.draw(screen)
