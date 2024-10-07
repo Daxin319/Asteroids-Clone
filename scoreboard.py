@@ -1,4 +1,5 @@
 import pygame
+import config
 from text import *
 
 
@@ -17,17 +18,24 @@ class Scoreboard(Text_box):
         self.score = 0
 
     def draw(self, screen, game_state):
+        x_scale = config.SCALE_X
+        y_scale = config.SCALE_Y
         
         if game_state == 0:
             score_str = f"Score: {self.score}"
-            score_image = self.font.render(score_str, True, self.color)
+            font_scale = (x_scale + y_scale) / 2
+            scaled_font = pygame.font.Font(None, int(self.font.get_height() * font_scale))
+            score_image = scaled_font.render(score_str, True, self.color)
             score_rect = score_image.get_rect()
-            score_rect.midtop = (self.screen_rect.centerx, 10)
+            score_rect.midtop = (int(self.screen_rect.centerx * x_scale), int(10 * y_scale))
             self.screen.blit(score_image, score_rect)
         else:
             score_str = f"Final Score: {self.score}"
-            score_image = self.end_font.render(score_str, True, self.color)
+            font_scale = (x_scale + y_scale) / 2
+            scaled_end_font_size = int(self.end_font.get_height() * font_scale)
+            scaled_end_font = pygame.font.Font(None, scaled_end_font_size)
+            score_image = scaled_end_font.render(score_str, True, self.color)
             score_rect = score_image.get_rect()
-            vertical_pos = self.screen_rect.centery + (self.screen_rect.height // 4)
-            score_rect.center = (self.screen_rect.centerx, vertical_pos)
+            vertical_pos = int(self.screen_rect.centery * y_scale) + int((self.screen_rect.height // 4) * y_scale)
+            score_rect.center = (int(self.screen_rect.centerx * x_scale), vertical_pos)
             self.screen.blit(score_image, score_rect)
