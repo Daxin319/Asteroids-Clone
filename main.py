@@ -1,10 +1,17 @@
 import pygame
+import config
+
 from constants import *
 from player import *
 from asteroid import *
 from asteroidfield import *
 from scoreboard import *
 from gameover import *
+
+def handle_resize(event):
+    config.SCREEN_WIDTH, config.SCREEN_HEIGHT = event.size
+    config.SCALE_X = config.SCREEN_WIDTH / BASE_WIDTH
+    config.SCALE_Y = config.SCREEN_HEIGHT / BASE_HEIGHT
 
 def main():
     pygame.init()
@@ -27,11 +34,9 @@ def main():
     Scoreboard.containers = (drawable)
 
     print("Starting asteroids!")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
     
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, PLAYER_RADIUS, shots)
+    screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT), pygame.RESIZABLE)
+    player = Player(config.SCREEN_WIDTH / 2, config.SCREEN_HEIGHT / 2, PLAYER_RADIUS, shots)
     asteroid_field = AsteroidField()
     scoreboard = Scoreboard(screen, 36, (255, 255, 255))
     game_over_screen = Game_over(screen, 36, (255, 255, 255))
@@ -40,6 +45,10 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+            elif event.type == pygame.VIDEORESIZE:
+                print(f"resized to {event.size}")
+                handle_resize(event)
+                screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT), pygame.RESIZABLE)
         
         screen.fill((0, 0, 0))
         

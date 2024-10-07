@@ -1,4 +1,5 @@
 import pygame
+import config
 from constants import *
 from circleshape import *
 
@@ -8,7 +9,9 @@ class Shot(CircleShape):
         super().__init__(position.x, position.y, radius)
 
     def draw(self, screen, game_state):
-        pygame.draw.circle(screen, "white", self.position, self.radius, 2)
+        scaled_radius = self.radius * min(config.SCALE_X, config.SCALE_Y)
+        scaled_position = (self.position.x * config.SCALE_X, self.position.y * config.SCALE_Y)
+        pygame.draw.circle(screen, "red", scaled_position, scaled_radius, 2)
 
     def update(self, dt):
         self.position += self.velocity * dt
