@@ -2,10 +2,15 @@ import pygame
 import random
 from constants import *
 from circleshape import *
+from scoreboard import *
 
 class Asteroid(CircleShape):
+    scores = {60:5, 40:10, 20:20}
+
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
+
+        self.score_value = self.scores[self.radius]
 
     def draw(self, screen):
         pygame.draw.circle(screen, "white", self.position, self.radius, 2)

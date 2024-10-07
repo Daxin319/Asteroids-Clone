@@ -3,9 +3,10 @@ from constants import *
 from player import *
 from asteroid import *
 from asteroidfield import *
+from scoreboard import *
 
 def main():
-    pygame.init
+    pygame.init()
 
     time = pygame.time.Clock()
     dt = 0
@@ -19,6 +20,7 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (updatable, drawable)
+    Scoreboard.containers = (drawable)
 
     print("Starting asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
@@ -27,6 +29,7 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, PLAYER_RADIUS, shots)
     asteroid_field = AsteroidField()
+    scoreboard = Scoreboard(screen)
 
     while True:
         for event in pygame.event.get():
@@ -46,6 +49,7 @@ def main():
             for shot in shots:
                 if shot.check_collision(asteroid) == True:
                     shot.kill()
+                    scoreboard.increase(asteroid.score_value)
                     asteroid.split()
         
         for entity in drawable:
