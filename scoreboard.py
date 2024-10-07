@@ -1,20 +1,13 @@
 import pygame
+from text import *
 
 
-class Scoreboard(pygame.sprite.Sprite):
+class Scoreboard(Text_box):
 
-    def __init__(self, screen, font_size=36, color=(255, 255, 255)):
+    def __init__(self, screen, font_size, color):
 
-        if hasattr(self, "containers"):
-            super().__init__(self.containers)
-        else:
-            super().__init__()
-            
-        self.screen = screen
-        self.screen_rect = screen.get_rect()
+        super().__init__(screen, font_size, color)
         self.score = 0
-        self.font = pygame.font.Font(None, font_size)
-        self.color = color
 
     def increase(self, points=1):
         self.score += points
@@ -22,9 +15,17 @@ class Scoreboard(pygame.sprite.Sprite):
     def reset(self):
         self.score = 0
 
-    def draw(self, screen):
-        score_str = f"Score: {self.score}"
-        score_image = self.font.render(score_str, True, self.color)
-        score_rect = score_image.get_rect()
-        score_rect.midtop = (self.screen_rect.centerx, 10)
-        self.screen.blit(score_image, score_rect)
+    def draw(self, screen, game_state):
+        
+        if game_state == 0:
+            score_str = f"Score: {self.score}"
+            score_image = self.font.render(score_str, True, self.color)
+            score_rect = score_image.get_rect()
+            score_rect.midtop = (self.screen_rect.centerx, 10)
+            self.screen.blit(score_image, score_rect)
+        else:
+            score_str = f"Final Score: {self.score}"
+            score_image = self.font.render(score_str, True, self.color)
+            score_rect = score_image.get_rect()
+            score_rect.midbottom = (self.screen_rect.centerx, -100)
+            self.screen.blit(score_image, score_rect)

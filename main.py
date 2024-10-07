@@ -4,12 +4,16 @@ from player import *
 from asteroid import *
 from asteroidfield import *
 from scoreboard import *
+from gameover import *
 
 def main():
     pygame.init()
 
     time = pygame.time.Clock()
     dt = 0
+    active = 0
+    game_over = 1
+    game_state = active
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -29,9 +33,9 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, PLAYER_RADIUS, shots)
     asteroid_field = AsteroidField()
-    scoreboard = Scoreboard(screen)
+    scoreboard = Scoreboard(screen, 36, (255, 255, 255))
 
-    while True:
+    while game_state == active:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -43,8 +47,7 @@ def main():
 
         for asteroid in asteroids:
             if asteroid.check_collision(player) == True:
-                print("Game Over!")
-                exit()
+                game_state = game_over
             
             for shot in shots:
                 if shot.check_collision(asteroid) == True:
@@ -53,11 +56,20 @@ def main():
                     asteroid.split()
         
         for entity in drawable:
-            entity.draw(screen)
+            entity.draw(screen, game_state)
 
         pygame.display.flip()
         time.tick(60) #60 fps
         dt = time.tick(60) / 1000
+
+    while game_state == game_over:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+        
+        screen.fill((0, 0, 0))
+
+
 
 
 if __name__ == "__main__":

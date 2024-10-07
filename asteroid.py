@@ -12,7 +12,7 @@ class Asteroid(CircleShape):
 
         self.score_value = self.scores[self.radius]
 
-    def draw(self, screen):
+    def draw(self, screen, game_state):
         pygame.draw.circle(screen, "white", self.position, self.radius, 2)
 
     def update(self, dt):
