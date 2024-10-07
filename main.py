@@ -34,6 +34,7 @@ def main():
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, PLAYER_RADIUS, shots)
     asteroid_field = AsteroidField()
     scoreboard = Scoreboard(screen, 36, (255, 255, 255))
+    game_over_screen = Game_over(screen, 36, (255, 255, 255))
 
     while game_state == active:
         for event in pygame.event.get():
@@ -66,8 +67,16 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return
         
         screen.fill((0, 0, 0))
+
+        game_over_screen.draw(screen, game_state)
+        scoreboard.draw(screen, game_state)
+
+        pygame.display.flip()
 
 
 
